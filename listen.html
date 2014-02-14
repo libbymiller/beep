@@ -1,0 +1,164 @@
+<html>
+<style type="text/css">
+div {
+  margin:5%;
+  font-size:40px;
+}
+
+.axis text {
+   font: 10px sans-serif;
+}
+
+.axis path, .axis line {
+   fill: none;
+   stroke: #000;
+   shape-rendering: crispEdges;
+}
+
+.freq {
+   fill: steelblue;
+   stroke: white;
+}
+
+.amp {
+   stroke: white;
+}
+
+.stop{    
+    float:right;
+    margin-right:10%;
+} 
+
+button{
+  width:50px;
+  height:30px;
+}
+
+</style>
+<script type="text/javascript" src="d3.v3.min.js"></script>
+<script type="text/javascript">
+
+  var context;
+  var the_interval;
+  var alphabet = "0123456789*#.|! abcdefghijklmnopqrstuvwxyz&";
+  var hi = 3400;
+  var low = 400;
+  var start_array = ['#','*','#'];
+  var dupe = "|";
+  var caps = "!";
+
+  // keys and associated freqncies
+  var freqs = [];
+  var keys = [];
+  var data = [];
+
+
+</script>
+
+<body>
+  <div class ="stop"><button onclick="stop_listening();return false;">stop</button></div>
+
+
+  <div id="result"></div>
+
+  <div id="freq_chart"></div>
+  <div id="freq"></div>
+  <div id="amp_chart"></div>
+  <div id="amp"></div>
+
+
+</body>
+<script type="text/javascript">
+
+var t = new Date() / 1000, // start time (seconds since epoch)
+     v = 0; // start value (subscribers)
+    
+ data = d3.range(33).map(next); // starting dataset
+     //data = [];
+
+function next() {
+    return {
+      time: ++t,
+      value: 0
+    };
+ } 
+
+ var w = 20,
+      h = 200;
+  
+  var x = d3.scale.linear()
+      .domain([0, 1])
+      .range([0, w]);
+  
+  var y = d3.scale.linear()
+      .domain([0, 100])
+      .rangeRound([0, h]);
+
+  var freq_chart = d3.select("#freq_chart").append("svg")
+     .attr("class", "chart")
+     .attr("width", w * data.length - 1)
+     .attr("height", h);
+
+  freq_chart.selectAll(".freq")
+     .data(data)
+     .enter()
+     .append("g").append("rect")
+     .attr("class","freq")
+     .attr("x", function(d, i) { return x(i) - .5; })
+     .attr("y", function(d) { return h - y(d.freq) - .5; })
+     .attr("width", w)
+     .attr("height", function(d) { return y(d.freq); });
+
+  freq_chart.append("line")
+     .attr("x1", 0)
+     .attr("x2", w * data.length)
+     .attr("y1", h - .5)
+     .attr("y2", h - .5)
+     .style("stroke", "#000");
+
+//and amps too
+  var amp_chart = d3.select("#amp_chart").append("svg")
+     .attr("class", "chart")
+     .attr("width", w * data.length - 1)
+     .attr("height", h);
+
+  amp_chart.selectAll(".amp")
+     .data(data)
+     .enter()
+     .append("g").append("rect")
+     .attr("class","amp")
+     .attr("x", function(d, i) { return x(i) - .5; })
+     .attr("y", function(d) { return h - y(d.amp) - .5; })
+     .attr("width", w)
+     .attr("height", function(d) { return y(d.amp); });
+
+  amp_chart.append("line")
+     .attr("x1", 0)
+     .attr("x2", w * data.length)
+     .attr("y1", h - .5)
+     .attr("y2", h - .5)
+     .style("stroke", "#000");
+
+
+ function redraw(data) {
+    // Update
+    freq_chart.selectAll(".freq")
+        .data(data)
+        .attr("y", function(d) { return h - y(d.freq) - .5; })
+        .attr("height", function(d) { return y(d.freq); });
+
+    amp_chart.selectAll(".amp")
+        .data(data)
+        .attr("y", function(d) { return h - y(d.amp) - .5; })
+        .attr("height", function(d) { return y(d.amp); });
+
+  }
+</script>
+<script type="text/javascript" src="listen.js"></script>
+<script type="text/javascript">
+  init(data);
+  get_context();
+  get_microphone_input();
+
+</script>
+</html>

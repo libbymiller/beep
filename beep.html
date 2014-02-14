@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <style type="text/css">
+       div {
+          margin:5%;
+          font-size:40px;
+       }
+       button{
+          width:50px;
+          height:30px;
+       }
+       #submit{
+          width:50px;
+          height:30px;
+          font-size:40px;
+       }
+       #message{
+          color:#4682b4;
+       }
+
+       textarea{
+          margin:5%;font-size:40px;
+       }
+       </style>
+        <title>Web Audio API test page</title>
+        <script type="text/javascript" src="beep.js"></script>
+    </head>
+
+    <body onload="javascript:populate_buttons();">
+
+      <div>Message:      <div id="message"></div></div>
+
+
+      <div>Add characters below to test</div>
+      <div>
+        <form onsubmit="play_from_form();return false;">
+          <textarea cols="20" rows="5" id="text_to_play">192.168.1.11</textarea>
+          <br />
+          <input type="submit" value="play" id="submit"/>
+        </form>
+      </div>
+      <div>Test buttons</div>
+      <div id="buttons_div">
+      </div>
+
+    </body>
+      <script type="text/javascript">
+
+      // audio api context
+      var context;
+
+      // characters we want to encode
+      var alphabet = "0123456789*#.|! abcdefghijklmnopqrstuvwxyz&";
+
+      // hi and low frequencies
+      var hi = 3400;
+      var low = 400;
+
+      // encoding parameters
+      var start_array = ['#','*','#'];
+      var dupe = "|";
+      var caps = "!";
+
+      // keys and associated freqncies
+      var freqs = [];
+      var keys = [];
+
+      // Tones
+      var tones = {};
+
+      // Milliseconds of sound
+      var note_length = 150; 
+
+      // Element to log to
+      var log = document.getElementById("message");
+
+      init();
+
+      get_context();
+
+      /* encode and play an example IP address */
+
+      function test(){
+        var ip_text = "192.168.1.11";
+        var ip_array = encode(ip_text);
+        play_array(ip_array, note_length, log);
+      }
+
+      /* encode and play text from the from */
+
+      function play_from_form(){
+         var text = document.getElementById("text_to_play").value;
+         if(text && text!=""){
+           var text_array = encode(text);
+           play_array(text_array, note_length, log);
+         }
+      }
+
+      /* set up buttons to be clickable */
+
+      function populate_buttons(){
+
+        console.log("Populating buttons");
+
+        var buttons_div = document.getElementById("buttons_div");
+        var elements = [];
+        for (var k = 0; k < keys.length; k++) {
+          var button = document.createElement("button");          
+          button.setAttribute("id",keys[k]);
+          button.setAttribute("freq",freqs[k]);
+          var text = document.createTextNode(keys[k]);
+          button.appendChild(text);
+          buttons_div.appendChild(button);
+          elements.push(button);
+        }
+
+       for (var i = 0; i < elements.length; i++){
+        var element = elements[i];
+
+        element.addEventListener('mousedown', function () {
+          var id = this.getAttribute("id");
+          var freq = this.getAttribute("freq");
+          if(freq){
+            play_note(freq);
+            console.log("playing "+freq+" for key "+id);
+          }
+        }, false);
+
+        element.addEventListener('mouseup', function () {
+          var freq = this.getAttribute("freq");
+          var id = this.getAttribute("id");
+          if(freq){
+            stop_playing_note(freq);
+            console.log("stopping "+freq+" for key "+id);
+          }else{
+            console.log("no freq");
+          }
+        }, false);
+       }
+
+      }
+
+
+      /* shows basic idea */
+
+      function tinytest(){
+        var text = "123";
+
+        var text_array = text.split("");
+        var count = 0;
+        var i = text_array[count];
+        
+        var index = keys.indexOf(i);
+        var freq = freqs[index];
+        console.log("playing "+freq);
+        play_note(freq);
+
+        var interval = setInterval(function(){
+          stop_playing_note(freq);
+          count = count+1;
+          if(text_array[count]){
+            var j = text_array[count];
+            var index = keys.indexOf(j);
+            freq = freqs[index];
+            console.log("playing "+freq);
+            play_note(freq);
+          }else{
+            clearInterval(interval);
+          }
+        },note_length);
+      }
+
+
+      </script>
+
+</html>
