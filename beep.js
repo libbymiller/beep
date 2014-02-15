@@ -182,7 +182,7 @@
         var index = keys.indexOf(i);
         var freq;
 
-        if(!index){
+        if(index < 0){
            log.innerHTML = " key not found for "+i+" /// "; // new message
            console.log(" key not found for "+i+" /// ");
         }else{

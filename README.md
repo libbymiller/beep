@@ -43,8 +43,13 @@ For the Web Audio API, you may need to put it on a web server. Load each of beep
 browser that does web audio and web RTC (chrome or firefox). Play one and allow the other to listen via the
 microphone.
 
+You can serve the page locally by doing something this:
 
-Useful links:
+    ruby -r webrick -e "m =  WEBrick::HTTPUtils::DefaultMimeTypes; m.store 'mp4', 'video/mp4'; m.store 'svg', 'image/svg+xml'; s = WEBrick::HTTPServer.new(:Port => 4000, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start"`
+
+
+Useful links
+============
 
 * [Subaudible python implementation](https://github.com/Katee/quietnet) (This is what got me interested recently)
 * [A web audio api version of something similar](http://smus.com/ultrasonic-networking/) with a nice explanation
