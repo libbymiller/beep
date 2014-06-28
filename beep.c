@@ -7,8 +7,12 @@
 #include <netinet/in.h>
 #include <stdio.h>
 
-#define SAMPLE_RATE   (22050)
+//#define SAMPLE_RATE   (22050)
+//#define FRAMES_PER_BUFFER  (1024)
+
+#define SAMPLE_RATE   (44100)
 #define FRAMES_PER_BUFFER  (1024)
+
 
 #ifndef M_PI
 #define M_PI  (3.1415926536)
@@ -25,8 +29,15 @@ typedef struct
 
 
 char alphabet[] = "0123456789*#.|! abcdefghijklmnopqrstuvwxyz&";
-const float hi = 3400.0;
-const float low = 400.0;
+//const float hi = 3400.0;
+///const float low = 400.0;
+
+//const float hi = 10.0;
+//const float low = 100.0;
+
+const float hi = 20000.0;
+const float low = 19000.0;
+
 float tones[200];
       
 // encoding parameters

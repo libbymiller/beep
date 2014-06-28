@@ -21,13 +21,15 @@
 #include "libfft.h"
 #include "libfft.c"
 #include "portaudio.h"
-#include <bits/sigaction.h>
+/*#include <bits/sigaction.h>*/
 
 /* -- some basic parameters -- */
 
 #define SAMPLE_RATE (44100)
 #define FFT_SIZE (1024)
 #define FFT_EXP_SIZE (10)
+//#define FFT_SIZE (4096)
+//#define FFT_EXP_SIZE (12)
 
 #ifndef M_PI
 #define M_PI  (3.1415926536)
@@ -73,7 +75,8 @@ int main( int argc, char **argv ) {
    // build the window, fft, etc
    buildHanWindow( window, FFT_SIZE );
    fft = initfft( FFT_EXP_SIZE );
-   computeSecondOrderLowPassParameters( SAMPLE_RATE, 3500, a, b );
+//   computeSecondOrderLowPassParameters( SAMPLE_RATE, 3500, a, b );
+   computeSecondOrderLowPassParameters( SAMPLE_RATE, 20000, a, b );
    mem1[0] = 0; mem1[1] = 0; mem1[2] = 0; mem1[3] = 0;
    mem2[0] = 0; mem2[1] = 0; mem2[2] = 0; mem2[3] = 0;
    //freq/note tables
@@ -150,9 +153,9 @@ int main( int argc, char **argv ) {
          }
       }
       float freq = freqTable[maxIndex];
-      if(freq > 350.0 && freq < 3400 ){
-        printf("freq %f \n",freq);
-      }
+//      if(freq > 350.0 && freq < 3400 ){
+      printf("freq %f \n",freq);
+ //     }
 
      }
    }
