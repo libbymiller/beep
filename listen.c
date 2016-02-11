@@ -21,6 +21,7 @@
 #include "libfft.h"
 #include "libfft.c"
 #include "portaudio.h"
+#include <wiringPi.h>
 /*#include <bits/sigaction.h>*/
 
 /* -- some basic parameters -- */
@@ -50,6 +51,14 @@ static bool running = true;
 
 /* -- main function -- */
 int main( int argc, char **argv ) {
+
+/* wiring pi setup */
+
+   wiringPiSetup () ;
+   pinMode (0, OUTPUT) ;
+   pinMode (1, OUTPUT) ;
+   pinMode (2, OUTPUT) ;
+
    PaStreamParameters inputParameters;
    float a[2], b[3], mem1[4], mem2[4];
    float data[FFT_SIZE];
@@ -80,7 +89,8 @@ int main( int argc, char **argv ) {
    mem1[0] = 0; mem1[1] = 0; mem1[2] = 0; mem1[3] = 0;
    mem2[0] = 0; mem2[1] = 0; mem2[2] = 0; mem2[3] = 0;
    //freq/note tables
-   for( int i=0; i<FFT_SIZE; ++i ) {
+   int i = 0;
+   for(i=0; i<FFT_SIZE; ++i ) {
       freqTable[i] = ( SAMPLE_RATE * i ) / (float) ( FFT_SIZE );
    }
 
@@ -130,7 +140,8 @@ int main( int argc, char **argv ) {
      if(err) printf(".");
      if(!err){
       // low-pass
-      for( int j=0; j<FFT_SIZE; ++j ) {
+      int j = 0;
+      for( j=0; j<FFT_SIZE; ++j ) {
          data[j] = processSecondOrderFilter( data[j], mem1, a, b );
          data[j] = processSecondOrderFilter( data[j], mem2, a, b );
       }
@@ -138,14 +149,14 @@ int main( int argc, char **argv ) {
       applyWindow( window, data, FFT_SIZE );
 
       // do the fft
-      for( int j=0; j<FFT_SIZE; ++j )
+      for( j=0; j<FFT_SIZE; ++j )
          datai[j] = 0;
       applyfft( fft, data, datai, false );
 
       //find the peak
       float maxVal = -1;
       int maxIndex = -1;
-      for( int j=0; j<FFT_SIZE/2; ++j ) {
+      for( j=0; j<FFT_SIZE/2; ++j ) {
          float v = data[j] * data[j] + datai[j] * datai[j] ;
          if( v > maxVal ) {
             maxVal = v;
@@ -154,8 +165,24 @@ int main( int argc, char **argv ) {
       }
       float freq = freqTable[maxIndex];
 //      if(freq > 350.0 && freq < 3400 ){
-      printf("freq %f \n",freq);
- //     }
+      if(freq > 0.0  && freq < 10000.0){
+        printf("freq %f \n",freq);
+        /* turn off all RGB */
+        digitalWrite (0, LOW);
+        digitalWrite (1, LOW);
+        digitalWrite (2, LOW);
+        /* pick an RGB value depending on the audio level */
+        /* super simple for now! */
+        if(freq > 0  && freq < 1000){
+          digitalWrite (0, HIGH);
+        }
+        if(freq > 1000  && freq < 3000){
+          digitalWrite (1, HIGH);
+        }
+        if(freq > 3000  && freq < 10000){
+          digitalWrite (2, HIGH);
+        }
+      }
 
      }
    }
@@ -183,17 +210,20 @@ int main( int argc, char **argv ) {
 
 void buildHammingWindow( float *window, int size )
 {
-   for( int i=0; i<size; ++i )
+   int i = 0;
+   for( i=0; i<size; ++i )
       window[i] = .54 - .46 * cos( 2 * M_PI * i / (float) size );
 }
 void buildHanWindow( float *window, int size )
 {
-   for( int i=0; i<size; ++i )
+   int i = 0;
+   for( i=0; i<size; ++i )
       window[i] = .5 * ( 1 - cos( 2 * M_PI * i / (size-1.0) ) );
 }
 void applyWindow( float *window, float *data, int size )
 {
-   for( int i=0; i<size; ++i )
+   int i=0;
+   for( i=0; i<size; ++i )
       data[i] *= window[i] ;
 }
 void computeSecondOrderLowPassParameters( float srate, float f, float *a, float *b )
