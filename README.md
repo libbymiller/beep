@@ -28,10 +28,16 @@ For the C code:
 Install portaudio bits:
 
     sudo apt-get install portaudio19-dev
+    
+Install wiring pi for fun
+
+    git clone git://git.drogon.net/wiringPi
+    cd wiringPi
+    ./build
 
 compile:
 
-    gcc beep.c -o beep -lportaudio
+    gcc listen.c -o listen -lportaudio -lwiringPi -lm
 
 then:
 
