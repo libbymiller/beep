@@ -25,14 +25,19 @@
        </style>
         <title>Web Audio API test page</title>
         <script type="text/javascript" src="camerons_lament.js"></script>
+        <script type="text/javascript" src="camerons_lament.json"></script>
     </head>
 
-    <body onload="javascript:populate_buttons();">
+    <body>
+      <div class ="stop"><button onclick="stop_listening();return false;">stop</button></div>
       <div id="amp"></div>
       <div id="freq"></div>
       <div id="result"></div>
       <div id="message"></div>
 
+      <div>
+<!--       <button onclick="test();return false;">hello</button>-->
+      </div>
     </body>
       <script type="text/javascript">
 
@@ -40,15 +45,29 @@
       var context;
 
       // keys and associated freqncies
-      var freqs = [196.00,261.63,155.56];
-      freq_error = 10.0;
-      var keys = ["G","C","D#"];
+//      var freqs = [196.00,261.63,155.56];
+  //    freq_error = 10.0;
+    //  var keys = ["G","C","D#"];
 
+      var freqs = [];
+      var keys = [];
+      freq_error = 10.0;
+      for(var key in note_data) {
+        if(note_data.hasOwnProperty(key)) { //to be safe
+          freqs.push(key);
+          keys.push(note_data[key]);
+        }
+      }
+
+      console.log("freqs");
+      console.log(freqs);
+      console.log("keys");
+      console.log(keys);
       // Tones
       var tones = {};
 
       // Milliseconds of sound
-      var note_length = 500; 
+      var note_length = 500 
 
       // Element to log to
       var log = document.getElementById("message");
@@ -57,6 +76,28 @@
 
       get_microphone_input();
 
+      function test(){
+        var text = "G3 C4 G3 D#";
+        var array = encode(text);
+        console.log("array");
+        console.log(array);
+        play_array(array, note_length);
+      }
+
+      function encode(text){
+        var new_array = [];
+        var arr = text.split(" ");
+        for(var i =0; i< arr.length; i++){
+           var index = keys.indexOf(arr[i]);           
+           var f = freqs[index];
+           if(f){
+             new_array.push(f);
+           }
+        }
+        return new_array;
+      }
+
       </script>
 
 </html>
+

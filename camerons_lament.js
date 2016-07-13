@@ -23,24 +23,6 @@
   var state = State.UNKNOWN;
   var data;
 
-  /* populate arrays for keys and frequncies */
-
-  function init(d){
-    data = d;
-    var increment = parseInt((hi - low)/alphabet.length);
-    keys = alphabet.split("");
-    var freq = low;
-    for(var i=0; i<alphabet.length; i++){
-      freqs[i] = freq;
-      freq = freq + increment;
-    }
-    freq_error = increment / 3;
-
-    console.log(keys);
-    console.log(freqs);
-
-  }
-
   /* check we have web audio api */
 
   function get_context(){
@@ -142,7 +124,7 @@
     var nyquist = context.sampleRate/2;
     freq = nyquist/raw_freqs.length * index;
     //document.getElementById("amp").innerHTML = "Amplitude: "+ amp;
-    //document.getElementById("freq").innerHTML = "Frequency: "+freq;
+    document.getElementById("freq").innerHTML = "Frequency: "+freq;
 
     process_character(freq);
 
@@ -158,8 +140,9 @@
       if(char && char!=last_char){
         result = result + "" + char;
         document.getElementById("result").innerHTML = char;
-        if(test_for_lament()==true){
-          document.getElementById("message").innerHTML = "RIGHT!";
+        var match = test_for_lament(); 
+        if(match){
+          document.getElementById("message").innerHTML = "RIGHT! "+match;
           result = "";
           setTimeout(function(){ document.getElementById("message").innerHTML = ""; }, 3000);
         }
@@ -176,12 +159,16 @@
   function test_for_lament(){
       var str = result;
       console.log("str "+str);
-      if(str.indexOf("GCGD#")!=-1){
+      if(str.indexOf("G3C4G3D#")!=-1){
+//      if(str.indexOf("F4C4F4F#G4")!=-1 || str.indexOf("G3C4G3D#")!=-1){
          console.log("match!");
-         return true;
-      }else{
+         return "G3C4G3D#";
+      }else if(str.indexOf("C4F4F#G4")!=-1){
+         console.log("match2!");
+         return "C4F4F#G4";
+      }else {
          console.log("no match!");
-         return false;
+         return null;
       }
   }
 
@@ -210,6 +197,8 @@
   /* convert freqs to chars */
 
   function freq_to_char(freq) {
+
+    var argh = 5.00;
     for (var i in freqs){
       if (( freq > freqs[i]-freq_error) && (freq < freqs[i]+freq_error )){
         var match = freqs[i];
@@ -221,6 +210,91 @@
   }
 
   /* stop listening and processing */
+
+  function stop_listening(){
+    console.log("STOPPING\n\n\n\n\n\n\n\n");
+    if(the_interval){
+      clearInterval(the_interval);
+    }else{
+      console.error("No interval to clear");
+    }
+  }
+
+
+  /* play array of notes */
+
+  function play_array(arr, len){
+
+        console.log("arr");
+        console.log(arr);
+
+        var count = 0;
+        var freq = freqs[count];
+        console.log("playing "+freq);
+        play_note(freq);
+
+        var interval = setInterval(function(){
+          if(freq){
+            stop_playing_note(freq);
+          }
+          count = count+1;
+          if(arr[count]){
+            freq = arr[count].toString();
+
+            if(!freq){
+                 console.log(" key not found for "+j+" ");
+            }else{
+                 console.log("playing "+freq);
+                 play_note(freq);
+            }
+
+          }else{
+            clearInterval(interval);
+          }
+        },len);
+
+   }
+
+
+
+  /* create an oscillator for a given frequency */
+
+  function create_oscillator(freq) {
+    var source = context.createOscillator();
+    source.connect(context.destination);
+    source.frequency.value = freq;
+    console.log("context");
+    console.log(context);
+//safari problem
+    source.noteOn ? source.noteOn(0) : source.start(0);
+    return source;
+  }
+
+
+  /* play a note */
+
+  function play_note(freq){
+    tones[freq.toString()] = create_oscillator(freq);
+  }
+
+
+  function stop_playing_note(freq){
+//safari again
+console.log("tones");
+console.log(tones);
+console.log("freq");
+console.log(freq.toString());
+    try{
+     var note = tones[freq.toString()];
+
+     note.stop(0);
+    }catch(e){
+       console.log(e);
+       note.noteOff(0);
+    }
+    delete tones[freq.toString()];
+  }
+
 
   function stop_listening(){
     console.log("STOPPING\n\n\n\n\n\n\n\n");
