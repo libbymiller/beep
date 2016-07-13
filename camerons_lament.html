@@ -2,13 +2,13 @@
 <html>
     <head>
       <style type="text/css">
-       div {
-          margin:5%;
-          font-size:40px;
+       body {
+          font-size:30px;
+          margin-left:8px;
        }
        button{
-          width:50px;
-          height:30px;
+          width:100px;
+          height:50px;
        }
        #submit{
           width:50px;
@@ -29,15 +29,19 @@
     </head>
 
     <body>
-      <div class ="stop"><button onclick="stop_listening();return false;">stop</button></div>
-      <div id="amp"></div>
-      <div id="freq"></div>
+      <p>See <a href="http://www.bbc.co.uk/news/uk-politics-36767880">Cameron hums tune</a> and <a href="http://www.classicfm.com/music-news/latest-news/cameron-humming-cello-piano/">various excellent musical variations</a> and this <a href="http://www.classicfm.com/discover/music-theory/david-cameron-musical-analysis/#6oejlCm1aAMR6fZY.97">musical analysis</a>: 
+        <br />
+        <img src="http://assets.gcstatic.com/u/apps/asset_manager/uploaded/2016/28/david-cameron-humming-musical-analysis-1468256220-custom-0.png"/> 
+      </p>
+      <p>Allow microphone access tand hum it yourself</p>
+      <div class ="stop"><button onclick="play_first_note();return false;">Play first note</button>
+       <button onclick="stop_listening();return false;">Stop listening</button></div>
+      <br />
       <div id="result"></div>
       <div id="message"></div>
+      <div id="freq"></div>
+      <div id="amp"></div>
 
-      <div>
-<!--       <button onclick="test();return false;">hello</button>-->
-      </div>
     </body>
       <script type="text/javascript">
 
@@ -45,10 +49,6 @@
       var context;
 
       // keys and associated freqncies
-//      var freqs = [196.00,261.63,155.56];
-  //    freq_error = 10.0;
-    //  var keys = ["G","C","D#"];
-
       var freqs = [];
       var keys = [];
       freq_error = 10.0;
@@ -59,15 +59,11 @@
         }
       }
 
-      console.log("freqs");
-      console.log(freqs);
-      console.log("keys");
-      console.log(keys);
       // Tones
       var tones = {};
 
       // Milliseconds of sound
-      var note_length = 500 
+      var note_length = 1000 
 
       // Element to log to
       var log = document.getElementById("message");
@@ -76,12 +72,9 @@
 
       get_microphone_input();
 
-      function test(){
-        var text = "G3 C4 G3 D#";
-        var array = encode(text);
-        console.log("array");
-        console.log(array);
-        play_array(array, note_length);
+      function play_first_note(){
+        var a = ["193.00"];
+        play_array(a, note_length);
       }
 
       function encode(text){

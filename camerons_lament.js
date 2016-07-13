@@ -160,12 +160,11 @@
       var str = result;
       console.log("str "+str);
       if(str.indexOf("G3C4G3D#")!=-1){
-//      if(str.indexOf("F4C4F4F#G4")!=-1 || str.indexOf("G3C4G3D#")!=-1){
          console.log("match!");
          return "G3C4G3D#";
-      }else if(str.indexOf("C4F4F#G4")!=-1){
+      }else if(str.indexOf("C4F4F#")!=-1){
          console.log("match2!");
-         return "C4F4F#G4";
+         return "C4F4F#";
       }else {
          console.log("no match!");
          return null;
@@ -229,10 +228,30 @@
         console.log(arr);
 
         var count = 0;
-        var freq = freqs[count];
+        var freq = arr[count];
         console.log("playing "+freq);
         play_note(freq);
+        var tt = setTimeout(function(){
+          if(freq){
+            stop_playing_note(freq);
+          }
+          count = count+1;
+          if(arr[count]){
+            freq = arr[count].toString();
 
+            if(!freq){
+                 console.log(" key not found for "+j+" ");
+            }else{
+                 console.log("playing "+freq);
+                 play_note(freq);
+            }
+
+          }else{
+            clearTimeout(tt);
+          }
+        },len);
+
+/*
         var interval = setInterval(function(){
           if(freq){
             stop_playing_note(freq);
@@ -252,19 +271,18 @@
             clearInterval(interval);
           }
         },len);
-
+*/
    }
 
 
 
   /* create an oscillator for a given frequency */
 
+
   function create_oscillator(freq) {
     var source = context.createOscillator();
-    source.connect(context.destination);
     source.frequency.value = freq;
-    console.log("context");
-    console.log(context);
+    source.connect(context.destination);
 //safari problem
     source.noteOn ? source.noteOn(0) : source.start(0);
     return source;
@@ -280,13 +298,8 @@
 
   function stop_playing_note(freq){
 //safari again
-console.log("tones");
-console.log(tones);
-console.log("freq");
-console.log(freq.toString());
     try{
      var note = tones[freq.toString()];
-
      note.stop(0);
     }catch(e){
        console.log(e);
