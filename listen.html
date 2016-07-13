@@ -75,6 +75,8 @@ var t = new Date() / 1000, // start time (seconds since epoch)
     
  data = d3.range(33).map(next); // starting dataset
      //data = [];
+ console.log("DATA");
+ console.log(data);
 
 function next() {
     return {
@@ -142,6 +144,7 @@ function next() {
 
  function redraw(data) {
     // Update
+
     freq_chart.selectAll(".freq")
         .data(data)
         .attr("y", function(d) { return h - y(d.freq) - .5; })
@@ -158,6 +161,7 @@ function next() {
 <script type="text/javascript">
   init(data);
   get_context();
+  console.log("ok");
   get_microphone_input();
 
 </script>

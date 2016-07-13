@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <style type="text/css">
+       div {
+          margin:5%;
+          font-size:40px;
+       }
+       button{
+          width:50px;
+          height:30px;
+       }
+       #submit{
+          width:50px;
+          height:30px;
+          font-size:40px;
+       }
+       #message{
+          color:#4682b4;
+       }
+
+       textarea{
+          margin:5%;font-size:40px;
+       }
+       </style>
+        <title>Web Audio API test page</title>
+        <script type="text/javascript" src="camerons_lament.js"></script>
+    </head>
+
+    <body onload="javascript:populate_buttons();">
+      <div id="amp"></div>
+      <div id="freq"></div>
+      <div id="result"></div>
+      <div id="message"></div>
+
+    </body>
+      <script type="text/javascript">
+
+      // audio api context
+      var context;
+
+      // keys and associated freqncies
+      var freqs = [196.00,261.63,155.56];
+      freq_error = 10.0;
+      var keys = ["G","C","D#"];
+
+      // Tones
+      var tones = {};
+
+      // Milliseconds of sound
+      var note_length = 500; 
+
+      // Element to log to
+      var log = document.getElementById("message");
+
+      get_context();
+
+      get_microphone_input();
+
+      </script>
+
+</html>
