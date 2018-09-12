@@ -3,8 +3,8 @@
     <head>
       <style type="text/css">
        div {
-          margin:5%;
-          font-size:40px;
+          margin:1%;
+          font-size:20px;
        }
        button{
           width:50px;
@@ -13,14 +13,15 @@
        #submit{
           width:50px;
           height:30px;
-          font-size:40px;
+          font-size:20px;
        }
        #message{
           color:#4682b4;
        }
 
        textarea{
-          margin:5%;font-size:40px;
+          margin:1%;
+          font-size:20px;
        }
        </style>
         <title>Web Audio API test page</title>
@@ -29,13 +30,14 @@
 
     <body onload="javascript:populate_buttons();">
 
-      <div>Message:      <div id="message"></div></div>
+      <div>Message sent:      <div id="message"></div></div>
 
 
-      <div>Add characters below to test</div>
+      <div>Open the <a href="listen.html">listener</a> in a new window</div>
+      <div>Type something below to transmit it</div>
       <div>
         <form onsubmit="play_from_form();return false;">
-          <textarea cols="20" rows="5" id="text_to_play">192.168.1.11</textarea>
+          <textarea cols="20" rows="5" id="text_to_play">hello beep</textarea>
           <br />
           <input type="submit" value="play" id="submit"/>
         </form>
