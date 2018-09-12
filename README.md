@@ -22,9 +22,10 @@ Voices](https://www.ics.uci.edu/~lopes/dv/dv.html).
 
 ### Webaudio API
 
- * clone the repo; cd beep
- * run a server, e.g. python -m SimpleHTTPServer
- * open [Frequency Shift Keying](http://localhost:8000/beep.html) and [listen page](http://localhost:8000/listen.html)
+ * clone the repo
+ * ```cd beep```
+ * run a server, e.g. ```python -m SimpleHTTPServer```
+ * open [beep](http://localhost:8000/beep.html) and [listen page](http://localhost:8000/listen.html) in separate windows; allow it access to microphone
  * type something in the box in beep.html to transmit it to listen.html 
 
 or
