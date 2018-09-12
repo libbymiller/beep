@@ -28,7 +28,7 @@
         <script type="text/javascript" src="beep.js"></script>
     </head>
 
-    <body onload="javascript:populate_buttons();">
+    <body>
 
       <div>Message sent:      <div id="message"></div></div>
 
@@ -41,9 +41,6 @@
           <br />
           <input type="submit" value="play" id="submit"/>
         </form>
-      </div>
-      <div>Test buttons</div>
-      <div id="buttons_div">
       </div>
 
     </body>
@@ -98,51 +95,6 @@
            play_array(text_array, note_length, log);
          }
       }
-
-      /* set up buttons to be clickable */
-
-      function populate_buttons(){
-
-        console.log("Populating buttons");
-
-        var buttons_div = document.getElementById("buttons_div");
-        var elements = [];
-        for (var k = 0; k < keys.length; k++) {
-          var button = document.createElement("button");          
-          button.setAttribute("id",keys[k]);
-          button.setAttribute("freq",freqs[k]);
-          var text = document.createTextNode(keys[k]);
-          button.appendChild(text);
-          buttons_div.appendChild(button);
-          elements.push(button);
-        }
-
-       for (var i = 0; i < elements.length; i++){
-        var element = elements[i];
-
-        element.addEventListener('mousedown', function () {
-          var id = this.getAttribute("id");
-          var freq = this.getAttribute("freq");
-          if(freq){
-            play_note(freq);
-            console.log("playing "+freq+" for key "+id);
-          }
-        }, false);
-
-        element.addEventListener('mouseup', function () {
-          var freq = this.getAttribute("freq");
-          var id = this.getAttribute("id");
-          if(freq){
-            stop_playing_note(freq);
-            console.log("stopping "+freq+" for key "+id);
-          }else{
-            console.log("no freq");
-          }
-        }, false);
-       }
-
-      }
-
 
       /* shows basic idea */
 
