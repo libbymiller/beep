@@ -44,42 +44,9 @@
   /* check we have web audio api */
 
   function get_context(){
-    try {
-      //AudioContext()is mozilla
-      context = AudioContext();
-    }
-    catch (e) {
-      console.log("Browser does not support Web Audio API as AudioContext(), trying another");
-    }
+    context = new (window.AudioContext || window.webkitAudioContext)();
+    console.log(context);
 
-    try{
-      if(!context){
-        context = new AudioContext();
-        console.log("context ok");
-        console.log(context);
-      }
-    }
-    catch (e) {
-      console.log("Browser does not support Web Audio API as new AudioContext(), trying another");
-    }
-    try{
-      if(!context){
-        context = new webkitAudioContext();
-      }
-    }
-    catch (e) {
-      console.log("Browser does not support Web Audio API as webkitAudioContext(), trying another");
-    }
-
-    try{
-      if(!context){
-        context = window.audioContext;
-      }
-    }
-    catch (e) {
-      console.error("Browser does not support Web Audio API: window.audioContext - all failed");
-      return false;
-    }
   }
 
 
