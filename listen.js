@@ -44,6 +44,7 @@
   /* check we have web audio api */
 
   function get_context(){
+
     context = new (window.AudioContext || window.webkitAudioContext)();
     console.log(context);
 
@@ -54,60 +55,6 @@
 
 
   function get_microphone_input() {
-//code from https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
-/*
-var promisifiedOldGUM = function(constraints) {
-
-  // First get ahold of getUserMedia, if present
-  var getUserMedia = (navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia);
-
-  // Some browsers just don't implement it - return a rejected promise with an error
-  // to keep a consistent interface
-  if(!getUserMedia) {
-    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-  }
-
-  // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
-  return new Promise(function(resolve, reject) {
-    getUserMedia.call(navigator, constraints, resolve, reject);
-  });
-		
-}
-
-// Older browsers might not implement mediaDevices at all, so we set an empty object first
-if(navigator.mediaDevices === undefined) {
-  navigator.mediaDevices = {};
-}
-
-// Some browsers partially implement mediaDevices. We can't just assign an object
-// with getUserMedia as it would overwrite existing properties.
-// Here, we will just add the getUserMedia property if it's missing.
-if(navigator.mediaDevices.getUserMedia === undefined) {
-  navigator.mediaDevices.getUserMedia = promisifiedOldGUM;
-}
-
-
-var constraints = { audio: true, video: false};
-
-navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-//        microphone.connect(analyser);
-  //      analyser.connect(context.destination);
-
-            var analyser = context.createAnalyser();
-            var microphone = context.createMediaStreamSource(stream);
-            microphone.connect(analyser);
-            process(analyser);
-
-})
-.catch(function(err) {
-  alert("no user audio");
-  console.log(err.name + ": " + err.message);
-  stop_listening();
-});
-*/
-
 
     navigator.getMedia = ( navigator.getUserMedia ||
                        navigator.webkitGetUserMedia ||
@@ -187,7 +134,7 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 
     if (char && char != last_char){
 
-       console.log("CHAR "+char);
+       //console.log("CHAR "+char);
 
        if(state == State.UNKNOWN){
          // keep lookign for the start sequence
@@ -226,7 +173,7 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
           // detecting the content and the checksum together, because | and ! do weird stuff otherwise
           // in theory this could happen with the length bis too :-(
 
-console.log("result.length "+result.length+" payload_length "+(payload_length+3)+"\n\n");
+            //console.log("result.length "+result.length+" payload_length "+(payload_length+3)+"\n\n");
             if(char == dupe || char == caps){
 
             //don't add special characters
@@ -241,23 +188,20 @@ console.log("result.length "+result.length+" payload_length "+(payload_length+3)
               result.push(char);
             }
 
-console.log("[2]result.length "+result.length+" payload_length "+(payload_length+3)+"\n\n");
+            //console.log("[2]result.length "+result.length+" payload_length "+(payload_length+3)+"\n\n");
 
             if (result.length >= payload_length + 3) { 
-console.log("going into state checsum ");
+              //console.log("going into state checsum ");
               state = State.CHECKSUM;
             } 
 
 
 
-//       } else if(state == State.CHECKSUM){
        } 
        if(state == State.CHECKSUM){
             //take the last 3 characters found
-console.log("result");
-console.log(result);
             checksum = result.slice(result.length-3, result.length);
-            console.log("CHECKSUM!!!!!! "+checksum);
+            console.log("CHECKSUM "+checksum);
             // assume three characters long
             if(checksum.length==3){
               var result_payload = result.slice(0,result.length-3);
@@ -286,11 +230,7 @@ console.log(result);
               }
             }
        } 
-       //if(state!=State.UNKNOWN){
-//         data.shift();
-  //       data.push({"time": new Date()/1000,"value": freq/50, "char":char});
-    //     redraw(data);
-       //}
+
        last_char = char;
     }
   }
@@ -307,12 +247,8 @@ console.log(result);
               payload_length_array = [];
               payload_length = 0;
               potential_start_array = [];
-//              if(the_interval){
-  //              clearInterval(the_interval);
-    //          }
 
               state = State.UNKNOWN;
-//              stop_listening();
 
   }
 
