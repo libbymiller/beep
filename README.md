@@ -28,6 +28,8 @@ Voices](https://www.ics.uci.edu/~lopes/dv/dv.html).
  * open [beep](http://localhost:8000/beep.html) and [listen page](http://localhost:8000/listen.html) in separate windows; allow it access to microphone
  * type something in the box in beep.html to transmit it to listen.html 
 
+*Update* 2025 - this didn't seem to work between browser windows (chrome noise cancelling?) but did between my iphone and laptop.
+
 or
 
 ### Raspberry Pi C code
